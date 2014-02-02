@@ -1,0 +1,46 @@
+<!DOCTYPE>
+<head>
+    <script type="text/javascript" src="mule-resource/js/mule.js"></script>
+    <script type="text/javascript">
+	
+    	function init(){
+    		mule.subscribe("/services/output", function(data){
+    	    	console.log(data.data);
+    	    	document.getElementById('console').value += data.data + '\n';
+    	    });
+    	}    
+    
+        function publishToMule() {                       
+            var message = document.getElementById('message').value;
+            var user = document.getElementById('user').value;                        
+            var text = user + ": " + message;                       
+            mule.publish("/services/input", text);
+        }      
+    </script>
+</head>
+ 
+<body onLoad="init()">
+	<table>
+		<tr>
+			<td colspan="2">
+				<label>Console:</label><br/>
+				<textarea id="console" style="width:100%; height:150px;" disabled="disabled"></textarea>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label>Message:</label> <input id="message" type="text"/>
+				<label>User:</label>
+		        <select id="user">
+		            <option value="Bob">Bob</option>
+		            <option value="Jon">Jon</option>
+		            <option value="Sem">Sem</option>		            
+		        </select>
+			</td>
+			<td>
+				<input id="sendButton" class="button" type="submit" name="Go" value="Send" onclick="publishToMule();"/>	
+			</td>
+		</tr>
+	</table>
+ </body>
+</html>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="ajax_demo">
+    <global-element type="org.mule.tooling.ui.modules.core.global.ajaxConnector" name="Ajax" entity-id="Ajax#1">
+        <properties>
+            <property value="30000" name="maxInterval"/>
+            <property value="0" name="interval"/>
+            <property value="" name="storePassword"/>
+            <property value="" name="class"/>
+            <property value="" name="property"/>
+            <property value="${app.home}/www" name="resourceBase"/>
+            <property value="" name="algorithm"/>
+            <property value="true" name="jsonCommented"/>
+            <property name="updated"/>
+            <property value="0" name="logLevel"/>
+            <property value="Ajax" name="name"/>
+            <property value="" name="path"/>
+            <property value="1000" name="refsThreshold"/>
+            <property value="false" name="disableReplyTo"/>
+            <property value="" name="keyPassword"/>
+            <property value="1500" name="multiFrameInterval"/>
+            <property value="1" name="auxiliary;index"/>
+            <property value="10000" name="timeout"/>
+            <property value="http://localhost:8090/mule/chat" name="serverUrl"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/ajax/client;24579310">
+                <property value="" name="storePassword"/>
+                <property value="" name="path"/>
+                <property value="" name="class"/>
+                <property value="true" name="isProcessed$$$$"/>
+            </property-collection>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/ajax/key-store;15863090">
+                <property value="" name="storePassword"/>
+                <property value="" name="path"/>
+                <property value="" name="class"/>
+                <property value="true" name="isProcessed$$$$"/>
+                <property value="" name="keyPassword"/>
+                <property value="" name="algorithm"/>
+            </property-collection>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/ajax/protocol-handler;22758875">
+                <property value="true" name="isProcessed$$$$"/>
+                <property value="" name="property"/>
+            </property-collection>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/ajax/server;20998079">
+                <property value="" name="storePassword"/>
+                <property value="" name="path"/>
+                <property value="true" name="isProcessed$$$$"/>
+            </property-collection>
+        </properties>
+        <description></description>
+    </global-element>
+    <flow SubFlow="false" name="AjaxChat" entity-id="725d5db5-0cc6-4170-8726-c18820d4f146">
+        <properties>
+            <property name="updated"/>
+            <property value="" name="processingStrategy2"/>
+            <property value="" name="bussinessEventsLabel"/>
+            <property value="2" name="auxiliary;index"/>
+            <property value="true" name="auxiliary;erased;processingStrategy2"/>
+            <property value="false" name="tracking:enable-default-events"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/ee/tracking/transaction;28599749">
+                <property value="true" name="isProcessed$$$$"/>
+            </property-collection>
+        </properties>
+        <description></description>
+        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#1">
+            <graphicalData height="0" width="0" y="0" x="0"/>
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="org.mule.tooling.ui.modules.core.ajax.AJAX" name="Ajax" entity-id="Ajax#2">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property value="" name="businessEventsLabel"/>
+                    <property value="false" name="disableTransportTransformer"/>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property value="false" name="tracking:enable-default-events"/>
+                    <property value="" name="ref"/>
+                    <property value="" name="transformer-refs"/>
+                    <property name="updated"/>
+                    <property value="" name="address"/>
+                    <property value="true" name="auxiliary;erased;encoding"/>
+                    <property value="" name="encoding"/>
+                    <property value="/services/input" name="channel"/>
+                    <property value="3" name="auxiliary;index"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property value="text/plain" name="mimeType"/>
+                    <property value="Ajax" name="connector-ref"/>
+                </properties>
+                <description></description>
+            </endpoint>
+            <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="Logger#1">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property value="#[payload:]" name="message"/>
+                    <property name="category"/>
+                    <property value="INFO" name="level"/>
+                    <property value="4" name="auxiliary;index"/>
+                </properties>
+            </pattern>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="org.mule.tooling.ui.modules.core.ajax.AJAX" name="Ajax" entity-id="Ajax#3">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property name="businessEventsLabel"/>
+                    <property name="messageCacheSize"/>
+                    <property name="disableTransportTransformer"/>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="cacheMessages"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property value="/services/output" name="channel"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property value="Ajax" name="connector-ref"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>
