@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="demo">
+    <global-element name="File" type="org.mule.tooling.ui.modules.core.global.fileConnector" entity-id="File#1">
+        <properties>
+            <property name="streaming" value="true"/>
+            <property name="reverseOrder"/>
+            <property name="moveToPattern"/>
+            <property name="workFileNamePattern"/>
+            <property name="workDirectory"/>
+            <property name="outputAppend"/>
+            <property name="pollingFrequency"/>
+            <property name="readFromDirectory"/>
+            <property name="validateConnections" value="true"/>
+            <property name="comparator"/>
+            <property name="writeToDirectory"/>
+            <property name="dispatcherPoolFactory-ref"/>
+            <property name="serialiseObjects"/>
+            <property name="moveToDirectory"/>
+            <property name="fileAge"/>
+            <property name="recursive"/>
+            <property name="name" value="File"/>
+            <property name="autoDelete" value="true"/>
+            <property name="dynamicNotification"/>
+            <property name="outputPattern"/>
+            <property name="auxiliary;index" value="1"/>
+        </properties>
+    </global-element>
+    <global-element name="Web logic JMS" type="http://www.mulesoft.org/schema/mule/jms/weblogic-connector" entity-id="Web logic JMS#1">
+        <properties>
+            <property name="jndiProviderUrl" value="t3://localhost:7001"/>
+            <property name="embeddedMode"/>
+            <property name="redeliveryHandlerFactory-ref"/>
+            <property name="connectionFactory-ref"/>
+            <property name="maxRedelivery"/>
+            <property name="durable"/>
+            <property name="password"/>
+            <property name="username"/>
+            <property name="name" value="Web_logic_JMS"/>
+            <property name="dynamicNotification"/>
+            <property name="noLocal"/>
+            <property name="auxiliary;index" value="2"/>
+            <property name="eagerConsumer"/>
+            <property name="numberOfConsumers"/>
+            <property name="acknowledgementMode"/>
+            <property name="jndiInitialFactory" value="weblogic.jndi.WLInitialContextFactory"/>
+            <property name="validateConnections" value="true"/>
+            <property name="disableTemporaryReplyToDestinations"/>
+            <property name="clientId" value="mule_test"/>
+            <property name="dispatcherPoolFactory-ref"/>
+            <property name="persistentDelivery"/>
+            <property name="forceJndiDestinations"/>
+            <property name="connectionFactoryJndiName" value="jms/TestConnectionFactory"/>
+            <property name="specification"/>
+            <property name="jndiDestinations"/>
+            <property name="honorQosHeaders"/>
+            <property name="cacheJmsSessions"/>
+            <property name="jndiProviderProperties-ref"/>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="WeblogicQueueTesting" entity-id="50fd663a-2640-4b34-9dd8-861909b3aba0">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="3"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="OneWay" name="Input File" type="http://www.mulesoft.org/schema/mule/file/endpoint" entity-id="File#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="reverseOrder"/>
+                    <property name="moveToPattern"/>
+                    <property name="pollingFrequency"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="comparator"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="exchange-pattern" value="one-way"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="moveToDirectory"/>
+                    <property name="address"/>
+                    <property name="fileAge"/>
+                    <property name="encoding"/>
+                    <property name="path" value="/Users/arbuzworks/Desktop/input"/>
+                    <property name="outputPattern"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="4"/>
+                    <property name="responseTimeout" value="10000"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern name="File to String" type="http://www.mulesoft.org/schema/mule/file/file-to-string-transformer" entity-id="File to String#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="5"/>
+                </properties>
+            </pattern>
+            <endpoint direction="Outbound" message-exchange-pattern="OneWay" name="JMS" type="http://www.mulesoft.org/schema/mule/jms/endpoint" entity-id="JMS#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="topic"/>
+                    <property name="queue" value="jms/TestJMSQueue"/>
+                    <property name="durableName"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="disableTemporaryReplyToDestinations"/>
+                    <property name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="auxiliary;index" value="6"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="connector-ref" value="Web_logic_JMS"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="WeblogicTopicTesting" entity-id="5d759e98-a145-4b59-a64f-4b2f9cbb2306">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="7"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#2">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="OneWay" name="JMS" type="http://www.mulesoft.org/schema/mule/jms/endpoint" entity-id="JMS#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="topic" value="jms/TestJMSTopic"/>
+                    <property name="queue"/>
+                    <property name="durableName" value="mulesoft"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="disableTemporaryReplyToDestinations"/>
+                    <property name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="auxiliary;index" value="8"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property name="connector-ref" value="Web_logic_JMS"/>
+                </properties>
+            </endpoint>
+            <pattern name="String to Byte Array" type="http://www.mulesoft.org/schema/mule/core/string-to-byte-array-transformer" entity-id="String to Byte Array#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="9"/>
+                </properties>
+            </pattern>
+            <endpoint direction="Outbound" message-exchange-pattern="OneWay" name="Output File" type="http://www.mulesoft.org/schema/mule/file/endpoint" entity-id="File#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="reverseOrder"/>
+                    <property name="moveToPattern"/>
+                    <property name="pollingFrequency"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="comparator"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="exchange-pattern" value="one-way"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="moveToDirectory"/>
+                    <property name="address"/>
+                    <property name="fileAge"/>
+                    <property name="encoding"/>
+                    <property name="path" value="/Users/arbuzworks/Desktop/output"/>
+                    <property name="outputPattern" value="weblogic_test.txt"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="10"/>
+                    <property name="responseTimeout" value="10000"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>

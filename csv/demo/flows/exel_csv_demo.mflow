@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="exel_csv_demo">
+    <global-element type="http://www.mulesoft.org/schema/mule/ee/data-mapper/config" name="DataMapper" entity-id="DataMapper#1">
+        <properties>
+            <property value="exeltocsvmap_grf" name="name"/>
+            <property value="1" name="auxiliary;index"/>
+            <property value="exeltocsvmap.grf" name="transformationGraphPath"/>
+        </properties>
+    </global-element>
+    <global-element type="http://www.mulesoft.org/schema/mule/ee/data-mapper/config" name="exceltocsvmap_grf" entity-id="!!!16bf9e9b-335d-4751-8584-bdb9da7bd5a3">
+        <properties>
+            <property value="" name="doc:description"/>
+            <property value="exceltocsvmap_grf" name="name"/>
+            <property value="exceltocsvmap_grf" name="doc:name"/>
+            <property value="exceltocsvmap.grf" name="transformationGraphPath"/>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="excel_csv_demoFlow1" entity-id="6866fc97-95bd-4714-8d5a-a8e5766322c0">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property value="2" name="auxiliary;index"/>
+        </properties>
+        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#1">
+            <graphicalData height="0" width="0" y="0" x="0"/>
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/file/endpoint" name="File" entity-id="File#1">
+                <graphicalData height="71" width="68" y="378" x="19"/>
+                <properties>
+                    <property name="reverseOrder"/>
+                    <property name="moveToPattern"/>
+                    <property name="pollingFrequency"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="comparator"/>
+                    <property name="disableTransportTransformer"/>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property value="${files.backup}" name="moveToDirectory"/>
+                    <property name="address"/>
+                    <property name="fileAge"/>
+                    <property value="${files.excel}" name="path"/>
+                    <property name="encoding"/>
+                    <property name="outputPattern"/>
+                    <property name="mimeType"/>
+                    <property value="3" name="auxiliary;index"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property name="connector-ref"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/file/filename-regex-filter;0">
+                        <property value=".*.xls" name="pattern"/>
+                        <property value="true" name="caseSensitive"/>
+                        <property value="true" name="isProcessed$$$$"/>
+                        <property value="4" name="auxiliary;index"/>
+                        <property value="4" name="auxiliary;wrapIn"/>
+                    </property-collection>
+                </properties>
+            </endpoint>
+            <pattern type="http://www.mulesoft.org/schema/mule/ee/data-mapper/data-mapper-connector" name="DataMapper" entity-id="090bbed3-fa67-4485-b49f-2364693393f3">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property value="exceltocsvmap_grf" name="config-ref"/>
+                </properties>
+            </pattern>
+            <pattern type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" name="Object to String" entity-id="Object to String#1">
+                <graphicalData height="71" width="120" y="378" x="147"/>
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property value="text/plain" name="mimeType"/>
+                    <property value="6" name="auxiliary;index"/>
+                </properties>
+            </pattern>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/file/endpoint" name="File" entity-id="File#2">
+                <graphicalData height="71" width="68" y="378" x="327"/>
+                <properties>
+                    <property name="reverseOrder"/>
+                    <property name="moveToPattern"/>
+                    <property name="pollingFrequency"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="comparator"/>
+                    <property name="disableTransportTransformer"/>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="moveToDirectory"/>
+                    <property name="address"/>
+                    <property name="fileAge"/>
+                    <property value="${files.csv}" name="path"/>
+                    <property name="encoding"/>
+                    <property value="#[function:datetime]" name="outputPattern"/>
+                    <property name="mimeType"/>
+                    <property value="7" name="auxiliary;index"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>

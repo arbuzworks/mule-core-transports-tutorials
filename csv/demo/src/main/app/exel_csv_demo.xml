@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd">
+    <data-mapper:config name="exeltocsvmap_grf" transformationGraphPath="exeltocsvmap.grf" doc:name="DataMapper"/>
+    <data-mapper:config name="exceltocsvmap_grf" transformationGraphPath="exceltocsvmap.grf" doc:name="exceltocsvmap_grf"/>
+    <flow name="excel_csv_demoFlow1" doc:name="excel_csv_demoFlow1">
+        <file:inbound-endpoint path="${files.excel}" moveToDirectory="${files.backup}" responseTimeout="10000" doc:name="File">
+            <file:filename-regex-filter pattern=".*.xls" caseSensitive="true"/>
+        </file:inbound-endpoint>
+        <data-mapper:transform config-ref="exceltocsvmap_grf" doc:name="DataMapper"/>
+        
+        <object-to-string-transformer mimeType="text/plain" doc:name="Object to String"/>
+        <file:outbound-endpoint path="${files.csv}" outputPattern="#[function:datetime]" responseTimeout="10000" doc:name="File"/>
+    </flow>
+</mule>

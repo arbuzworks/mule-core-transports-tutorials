@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:wmq="http://www.mulesoft.org/schema/mule/ee/wmq" xmlns:ajax="http://www.mulesoft.org/schema/mule/ajax"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/wmq http://www.mulesoft.org/schema/mule/ee/wmq/current/mule-wmq-ee.xsd 
+http://www.mulesoft.org/schema/mule/ajax http://www.mulesoft.org/schema/mule/ajax/current/mule-ajax.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+    <wmq:connector name="wmqConnector" hostName="${wmq.host}" port="${wmq.port}" queueManager="${wmq.queue.manager}" username="${wmq.username}" password="${wmq.password} " doc:name="WMQ Connector" validateConnections="true"> 
+        <ee:reconnect-forever></ee:reconnect-forever>  
+    </wmq:connector>
+    <ajax:connector name="ajaxServer" serverUrl="http://0.0.0.0:8086/services/wmqExample" resourceBase="${app.home}/docroot" disableReplyTo="true" doc:name="Ajax"></ajax:connector>
+    <flow name="InputJMS" doc:name="InputJMS"> 
+        <ajax:inbound-endpoint channel="/services/enqueue" doc:name="Ajax" responseTimeout="10000"></ajax:inbound-endpoint>  
+        <message-properties-transformer doc:name="Message Properties"> 
+            <delete-message-property key="MULE_REPLYTO"></delete-message-property>  
+        </message-properties-transformer>  
+        <wmq:outbound-endpoint queue="in" connector-ref="wmqConnector" doc:name="WMQ"> </wmq:outbound-endpoint>  
+    </flow>
+    <flow name="JMSProcessor" doc:name="JMSProcessor"> 
+        <wmq:inbound-endpoint queue="in" connector-ref="wmqConnector" doc:name="WMQ"> 
+            <wmq:transaction action="NONE"></wmq:transaction>  
+        </wmq:inbound-endpoint>  
+        <test-component appendString=" - processed" logMessageDetails="true" waitTime="15000"></test-component>  
+        <wmq:outbound-endpoint queue="out" connector-ref="wmqConnector" doc:name="WMQ"> 
+            <wmq:transaction action="NONE"></wmq:transaction>  
+        </wmq:outbound-endpoint>  
+    </flow>
+    <flow name="JMSOutput" doc:name="JMSOutput"> 
+        <wmq:inbound-endpoint queue="out" connector-ref="wmqConnector" doc:name="WMQ"></wmq:inbound-endpoint>  
+        <ajax:outbound-endpoint channel="/services/dequeue" cacheMessages="true" doc:name="Ajax" responseTimeout="10000"></ajax:outbound-endpoint>  
+    </flow>
+</mule>

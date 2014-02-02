@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:imaps="http://www.mulesoft.org/schema/mule/imaps" xmlns:pop3="http://www.mulesoft.org/schema/mule/pop3" xmlns:imap="http://www.mulesoft.org/schema/mule/imap" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:email="http://www.mulesoft.org/schema/mule/email"
+	xmlns:smtps="http://www.mulesoft.org/schema/mule/smtps"
+	xmlns:smtp="http://www.mulesoft.org/schema/mule/smtp" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/smtps http://www.mulesoft.org/schema/mule/smtps/current/mule-smtps.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/smtp http://www.mulesoft.org/schema/mule/smtp/current/mule-smtp.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/imap http://www.mulesoft.org/schema/mule/imap/current/mule-imap.xsd
+http://www.mulesoft.org/schema/mule/pop3 http://www.mulesoft.org/schema/mule/pop3/current/mule-pop3.xsd
+http://www.mulesoft.org/schema/mule/imaps http://www.mulesoft.org/schema/mule/imaps/current/mule-imaps.xsd">
+    <flow name="outcomingSmtp" doc:name="outcomingSmtp">
+        <file:inbound-endpoint path="${file.outcomingSmtp}" doc:name="File" responseTimeout="10000">
+            <file:file-to-string-transformer/>
+        </file:inbound-endpoint>
+        <smtp:outbound-endpoint host="${smtp.host}" user="${email.username}" password="${email.password}" to="${header.to}" from="${header.from}" subject="${header.subject}" responseTimeout="10000" doc:name="SMTP" port="${smtp.port}" mimeType="text/plain">
+            <email:string-to-email-transformer/>
+        </smtp:outbound-endpoint>
+    </flow>     
+    <flow name="incomingPop3" doc:name="incomingPop3">
+        <pop3:inbound-endpoint host="${pop3.host}" user="${email.username}" password="${email.password}" responseTimeout="10000" doc:name="POP3" port="${pop3.port}" />
+        <file:outbound-endpoint responseTimeout="10000" doc:name="File" path="${file.incomingPop3}" outputPattern="#[function:datestamp]" mimeType="text/plain">
+             <file:file-to-string-transformer/>
+        </file:outbound-endpoint>        
+    </flow>
+    <flow name="incomingImap" doc:name="incomingImap">
+        <imap:inbound-endpoint host="${imap.host}" port="${imap.port}" user="${email.username}" password="${email.password}" responseTimeout="10000" doc:name="IMAP" />
+        <file:outbound-endpoint path="${file.incomingImap}" outputPattern="#[function:datestamp]" responseTimeout="10000" mimeType="text/plain" doc:name="File"/>
+    </flow>    
+</mule>

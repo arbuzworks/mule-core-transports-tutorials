@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ajax="http://www.mulesoft.org/schema/mule/ajax" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:jetty="http://www.mulesoft.org/schema/mule/jetty" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:servlet="http://www.mulesoft.org/schema/mule/servlet" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/servlet http://www.mulesoft.org/schema/mule/servlet/current/mule-servlet.xsd
+http://www.mulesoft.org/schema/mule/jetty http://www.mulesoft.org/schema/mule/jetty/current/mule-jetty.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/ajax http://www.mulesoft.org/schema/mule/ajax/current/mule-ajax.xsd">
+    <jms:connector name="SwiftMQ_JMS" validateConnections="true" jndiProviderUrl="smqp://localhost:4001/timeout=100000" doc:name="JMS" connectionFactoryJndiName="ConnectionFactory" forceJndiDestinations="true" jndiDestinations="true" jndiInitialFactory="com.swiftmq.jndi.InitialContextFactoryImpl" specification="1.1"/>
+    <ajax:connector name="Ajax" serverUrl="http://localhost:8080/chat" resourceBase="${app.home}/www" jsonCommented="true" doc:name="Ajax"/>
+  
+    <flow name="InputJMS" doc:name="InputJMS">
+        <ajax:inbound-endpoint channel="/income" responseTimeout="10000" connector-ref="Ajax" doc:name="Ajax"/>
+        <jms:outbound-endpoint queue="testqueue" connector-ref="SwiftMQ_JMS" doc:name="JMS"/>
+    </flow>
+    <flow name="JMSProcessor" doc:name="JMSProcessor">
+        <jms:inbound-endpoint queue="testqueue" connector-ref="SwiftMQ_JMS" doc:name="JMS"/>
+        <jms:outbound-endpoint  connector-ref="SwiftMQ_JMS" doc:name="JMS" topic="testtopic"/>
+    </flow>
+    <flow name="OutputJMS" doc:name="OutputJMS">
+        <jms:inbound-endpoint  connector-ref="SwiftMQ_JMS" doc:name="JMS" topic="testtopic"/>
+        <ajax:outbound-endpoint channel="/outcome" responseTimeout="10000" connector-ref="Ajax" doc:name="Ajax"/>
+    </flow>
+</mule>

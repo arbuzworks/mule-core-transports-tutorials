@@ -1,0 +1,38 @@
+<!DOCTYPE>
+<head>
+    <script type="text/javascript" src="mule-resource/js/mule.js"></script>
+    <script type="text/javascript">
+    	function init(){
+    		mule.subscribe("/outcome", function(data){
+    	    	document.getElementById('messages').value += data.data + '\n';
+    	    	document.getElementById('message').value = '';
+    	    });
+    	}    
+    
+        function publishToMule() {                       
+            var message = document.getElementById('message').value;
+            mule.publish("/income", message);
+        }      
+    </script>
+</head>
+
+<body onLoad="init()">
+	<h3>RabbitMQ</h3>
+	<table>
+		<tr>
+			<td colspan="2">
+				<label>Messages:</label><br/>
+				<textarea id="messages" style="width:100%; height:150px;" disabled="disabled"></textarea>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label>Message:</label> <input id="message" type="text"/>				
+			</td>
+			<td>
+				<input id="sendButton" class="button" type="submit" name="Send" value="Send" onclick="publishToMule();"/>	
+			</td>
+		</tr>
+	</table>
+ </body>
+</html>

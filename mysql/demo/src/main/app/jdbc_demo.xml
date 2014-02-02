@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:mulexml="http://www.mulesoft.org/schema/mule/xml" xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:jdbc-ee="http://www.mulesoft.org/schema/mule/ee/jdbc" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:https="http://www.mulesoft.org/schema/mule/https" xmlns:jetty-ssl="http://www.mulesoft.org/schema/mule/jetty-ssl" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:jetty="http://www.mulesoft.org/schema/mule/jetty" xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp"
+	xmlns:ssl="http://www.mulesoft.org/schema/mule/ssl" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/ee/jdbc http://www.mulesoft.org/schema/mule/ee/jdbc/current/mule-jdbc-ee.xsd
+http://www.mulesoft.org/schema/mule/tcp http://www.mulesoft.org/schema/mule/tcp/current/mule-tcp.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ssl http://www.mulesoft.org/schema/mule/ssl/current/mule-ssl.xsd
+http://www.mulesoft.org/schema/mule/jetty http://www.mulesoft.org/schema/mule/jetty/current/mule-jetty.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/jetty-ssl http://www.mulesoft.org/schema/mule/jetty-ssl/current/mule-jetty-ssl.xsd
+http://www.mulesoft.org/schema/mule/https http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/xml http://www.mulesoft.org/schema/mule/xml/current/mule-xml.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
+    <jdbc-ee:mysql-data-source name="MySQL_Data_Source" user="${db.user}" password="${db.password}" url="${db.connection_string}" transactionIsolation="UNSPECIFIED" doc:name="MySQL Data Source"></jdbc-ee:mysql-data-source>
+    <jdbc-ee:connector name="Database" dataSource-ref="MySQL_Data_Source" validateConnections="true" queryTimeout="-1" pollingFrequency="0" doc:name="Database">
+        <jdbc-ee:query key="updateItem" value="UPDATE demo_tbl SET title=#[message.inboundProperties['title']], description=#[message.inboundProperties['description']] WHERE id=#[message.inboundProperties['id']]"/>
+        <jdbc-ee:query key="insertItem" value="insert into demo_tbl set title=#[message.inboundProperties['title']], description=#[message.inboundProperties['description']]"/>
+        <jdbc-ee:query key="selectAll" value="select * from demo_tbl"/>
+        <jdbc-ee:query key="deleteItem" value="DELETE FROM demo_tbl WHERE id=#[message.inboundProperties['id']]"/>
+        <jdbc-ee:query key="findById" value="SELECT * FROM demo_tbl  WHERE id=#[message.inboundProperties['id']]"/>
+    </jdbc-ee:connector>
+    <json:object-to-json-transformer name="Object_to_JSON" doc:name="Object to JSON"></json:object-to-json-transformer>
+    <json:object-to-json-transformer name="Object_to_JSON1" doc:name="Object to JSON"></json:object-to-json-transformer>
+    <http:endpoint exchange-pattern="request-response" host="localhost" port="8081" path="list" method="POST" name="HTTP" doc:name="HTTP"/>
+    <http:connector name="HTTP_HTTPS" cookieSpec="netscape" validateConnections="true" sendBufferSize="0" receiveBufferSize="0" receiveBacklog="0" clientSoTimeout="10000" serverSoTimeout="10000" socketSoLinger="0" doc:name="HTTP\HTTPS"/>
+    
+    <flow name="listItems" doc:name="listItems">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="list" doc:name="HTTP"/>
+        <jdbc-ee:outbound-endpoint exchange-pattern="request-response" queryKey="selectAll" queryTimeout="-1" connector-ref="Database" doc:name="Select all items"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+    </flow>
+    <flow name="createItem" doc:name="createItem">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="create" doc:name="HTTP"/>
+        <jdbc-ee:outbound-endpoint exchange-pattern="request-response" queryKey="insertItem" queryTimeout="-1" connector-ref="Database" doc:name="Insert new item">
+        </jdbc-ee:outbound-endpoint>
+        <jdbc-ee:outbound-endpoint exchange-pattern="request-response" queryKey="selectAll" queryTimeout="-1" connector-ref="Database" doc:name="Select all items"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+    </flow>
+
+    <flow name="updateItem" doc:name="updateItem"> 
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="update" doc:name="HTTP"></http:inbound-endpoint>  
+        <jdbc-ee:outbound-endpoint exchange-pattern="request-response" queryKey="updateItem" queryTimeout="-1" connector-ref="Database" doc:name="Update item">
+  
+        </jdbc-ee:outbound-endpoint>
+        <jdbc-ee:outbound-endpoint exchange-pattern="request-response" queryKey="findById" queryTimeout="-1" connector-ref="Database" doc:name="Select all items"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+  
+    </flow>
+    <flow name="deleteItem" doc:name="deleteItem">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="delete" doc:name="HTTP"/>
+        <jdbc-ee:outbound-endpoint exchange-pattern="request-response" queryKey="deleteItem" queryTimeout="-1" connector-ref="Database" doc:name="Delete item">
+        </jdbc-ee:outbound-endpoint>
+        <jdbc-ee:outbound-endpoint exchange-pattern="request-response" queryKey="selectAll" queryTimeout="-1" connector-ref="Database" doc:name="Select all items"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+    </flow>
+    <flow name="finfById" doc:name="finfById">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="find" doc:name="HTTP"/>
+        <jdbc-ee:outbound-endpoint exchange-pattern="request-response" queryKey="findById" queryTimeout="-1" connector-ref="Database" doc:name="Retrive one item"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+    </flow>    
+</mule>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Graph author="ruslan" created="Wed Jul 31 10:16:43 EEST 2013" guiVersion="3.3.2" id="1375255082878" licenseCode="CLPXDMULES37812333BY" licenseType="Commercial" modified="Wed Jul 31 10:16:43 EEST 2013" modifiedBy="ruslan" name="exeltocsvmap_grf" preview-file="${Project_Home}/examples/example.xls" revision="1.0" showComponentDetails="false">
+<Global>
+<Metadata _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _type="Input" id="4befe230-7f83-4ef5-beb6-458b8a0f7b93">
+<Record fieldDelimiter="|" name="example" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field __sourcePath="1/0" label="id" name="id" type="long"/>
+<Field __sourcePath="1/1" label="title" name="title" type="string"/>
+<Field __sourcePath="1/2" label="description" name="description" type="string"/>
+<Field __sourcePath="1/3" label="color" name="color" type="string"/>
+<Field __artificialType="_id" auto_filling="global_row_count" name="__id" type="long"/>
+</Record>
+</Metadata>
+<Metadata _dataStructure="SINGLE_DIMENSIONAL_COLLECTION" _type="Output" id="e5116931-dbcf-4f0c-a8a9-1c8137c45d72">
+<Record fieldDelimiter="," name="example" recordDelimiter="\n\\|\r\n\\|\r" type="delimited">
+<Field containerType="SINGLE" label="id" name="id" size="10" type="string"/>
+<Field containerType="SINGLE" label="title" name="title" size="10" type="string"/>
+<Field containerType="SINGLE" label="description" name="description" size="10" type="string"/>
+<Field containerType="SINGLE" eofAsDelimiter="true" label="color" name="color" size="10" type="string"/>
+<Field __artificialType="_id" name="__id" type="long"/>
+</Record>
+</Metadata>
+<Dictionary>
+<Entry id="DictionaryEntry0" input="true" name="inputPayload" output="false" type="object"/>
+<Entry id="DictionaryEntry1" input="false" name="outputPayload" output="true" type="object"/>
+</Dictionary>
+</Global>
+<Phase number="0">
+<Node charset="UTF-8" enabled="enabled" excludeFields="__id" fileURL="dict:outputPayload" guiHeight="0" guiName="CSV WRITER" guiWidth="0" guiX="900" guiY="20" id="DATA_WRITER0" quotedStrings="true" type="DATA_WRITER">
+<attr name="_data_format"><![CDATA[CSV]]></attr>
+<attr name="__dataSourceDefinition"><![CDATA[${Project_Home}/examples/example.csv]]></attr>
+</Node>
+<Node enabled="enabled" guiHeight="0" guiName="Foreach 'example' -&gt; 'example'" guiWidth="0" guiX="460" guiY="20" id="REFORMAT0" transformClass="com.mulesoft.datamapper.transform.MelRecordTransform" type="REFORMAT">
+<attr name="melScript"><![CDATA[//MEL
+//START -> DO NOT REMOVE
+output.__id = input.__id;
+//END -> DO NOT REMOVE
+output.id = (isnull(input.id) ? null : num2str(input.id));
+output.title = input.title;
+output.description = input.description;
+output.color = input.color;
+]]></attr>
+</Node>
+<Node enabled="enabled" fileURL="dict:inputPayload" guiHeight="0" guiName="MS Excel READER" guiWidth="0" guiX="20" guiY="20" id="SPREADSHEET_READER0" type="SPREADSHEET_READER">
+<attr name="mapping"><![CDATA[<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mapping>
+    <globalAttributes>
+        <orientation>VERTICAL</orientation>
+        <step>1</step>
+        <writeHeader>true</writeHeader>
+    </globalAttributes>
+    <defaultSkip>1</defaultSkip>
+    <headerGroups>
+        <headerGroup skip="1">
+            <cloverField>id</cloverField>
+            <headerRanges>
+                <headerRange begin="A1"/>
+            </headerRanges>
+        </headerGroup>
+        <headerGroup skip="1">
+            <cloverField>title</cloverField>
+            <headerRanges>
+                <headerRange begin="B1"/>
+            </headerRanges>
+        </headerGroup>
+        <headerGroup skip="1">
+            <cloverField>description</cloverField>
+            <headerRanges>
+                <headerRange begin="C1"/>
+            </headerRanges>
+        </headerGroup>
+        <headerGroup skip="1">
+            <cloverField>color</cloverField>
+            <headerRanges>
+                <headerRange begin="D1"/>
+            </headerRanges>
+        </headerGroup>
+    </headerGroups>
+</mapping>
+]]></attr>
+<attr name="_data_format"><![CDATA[XLS]]></attr>
+<attr name="__dataSourceDefinition"><![CDATA[${Project_Home}/examples/example.xls]]></attr>
+</Node>
+<Edge debugMode="true" fromNode="REFORMAT0:0" guiBendpoints="" id="Edge1" inPort="Port 0 (in)" metadata="e5116931-dbcf-4f0c-a8a9-1c8137c45d72" outPort="Port 0 (out)" toNode="DATA_WRITER0:0"/>
+<Edge debugMode="true" fromNode="SPREADSHEET_READER0:0" guiBendpoints="" id="Edge0" inPort="Port 0 (in)" metadata="4befe230-7f83-4ef5-beb6-458b8a0f7b93" outPort="Port 0 (output)" toNode="REFORMAT0:0"/>
+</Phase>
+</Graph>

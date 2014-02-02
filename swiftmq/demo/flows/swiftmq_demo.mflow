@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="swiftmq_demo">
+    <global-element type="http://www.mulesoft.org/schema/mule/jms/connector" name="JMS" entity-id="JMS#1">
+        <properties>
+            <property value="false" name="customReconnection"/>
+            <property value="false" name="standardReconnection"/>
+            <property value="smqp://localhost:4001/timeout=100000" name="jndiProviderUrl"/>
+            <property value="" name="redeliveryHandlerFactory-ref"/>
+            <property value="false" name="embeddedMode"/>
+            <property value="false" name="durable"/>
+            <property value="" name="connectionFactory-ref"/>
+            <property value="-1" name="maxRedelivery"/>
+            <property value="" name="password"/>
+            <property value="true" name="noReconnection"/>
+            <property value="" name="username"/>
+            <property name="updated"/>
+            <property value="SwiftMQ_JMS" name="name"/>
+            <property value="false" name="dynamicNotification"/>
+            <property value="false" name="noLocal"/>
+            <property value="1" name="auxiliary;index"/>
+            <property value="false" name="eagerConsumer"/>
+            <property value="" name="d"/>
+            <property value="1" name="numberOfConsumers"/>
+            <property value="AUTO_ACKNOWLEDGE" name="acknowledgementMode"/>
+            <property value="com.swiftmq.jndi.InitialContextFactoryImpl" name="jndiInitialFactory"/>
+            <property value="true" name="validateConnections"/>
+            <property value="false" name="disableTemporaryReplyToDestinations"/>
+            <property value="" name="clientId"/>
+            <property value="" name="dispatcherPoolFactory-ref"/>
+            <property value="true" name="blocking"/>
+            <property value="false" name="persistentDelivery"/>
+            <property value="true" name="forceJndiDestinations"/>
+            <property value="1.1" name="specification"/>
+            <property value="ConnectionFactory" name="connectionFactoryJndiName"/>
+            <property value="true" name="jndiDestinations"/>
+            <property value="false" name="honorQosHeaders"/>
+            <property value="false" name="cacheJmsSessions"/>
+            <property value="" name="jndiProviderProperties-ref"/>
+            <property-collection name="">
+                <property value="true" name="blocking"/>
+                <property value="" name="d"/>
+                <property value="false" name="customReconnection"/>
+                <property value="false" name="standardReconnection"/>
+                <property value="true" name="noReconnection"/>
+            </property-collection>
+        </properties>
+        <description></description>
+    </global-element>
+    <global-element type="org.mule.tooling.ui.modules.core.global.ajaxConnector" name="Ajax" entity-id="Ajax#1">
+        <properties>
+            <property name="maxInterval"/>
+            <property value="true" name="jsonCommented"/>
+            <property name="interval"/>
+            <property name="logLevel"/>
+            <property value="Ajax" name="name"/>
+            <property name="refsThreshold"/>
+            <property name="disableReplyTo"/>
+            <property name="multiFrameInterval"/>
+            <property value="${app.home}/www" name="resourceBase"/>
+            <property name="timeout"/>
+            <property value="2" name="auxiliary;index"/>
+            <property value="http://localhost:8080/chat" name="serverUrl"/>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="InputJMS" entity-id="a78f086a-8081-4a8f-b1d1-3151196a148f">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property value="3" name="auxiliary;index"/>
+        </properties>
+        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#1">
+            <graphicalData height="0" width="0" y="0" x="0"/>
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="org.mule.tooling.ui.modules.core.ajax.AJAX" name="Ajax" entity-id="Ajax#2">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property name="businessEventsLabel"/>
+                    <property name="messageCacheSize"/>
+                    <property name="disableTransportTransformer"/>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="cacheMessages"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property value="/income" name="channel"/>
+                    <property value="4" name="auxiliary;index"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property value="Ajax" name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="JMS" entity-id="JMS#2">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property value="true" name="auxiliary;erased;mimeType"/>
+                    <property value="testqueue" name="queue"/>
+                    <property value="" name="businessEventsLabel"/>
+                    <property value="false" name="disableTransportTransformer"/>
+                    <property value="false" name="disableTemporaryReplyToDestinations"/>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property value="false" name="tracking:enable-default-events"/>
+                    <property value="" name="ref"/>
+                    <property value="" name="transformer-refs"/>
+                    <property name="updated"/>
+                    <property value="" name="address"/>
+                    <property value="true" name="auxiliary;erased;encoding"/>
+                    <property value="" name="encoding"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property value="" name="mimeType"/>
+                    <property value="SwiftMQ_JMS" name="connector-ref"/>
+                </properties>
+                <description></description>
+            </endpoint>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="JMSProcessor" entity-id="86914d38-c0f5-4b78-8d7b-dec4cd04b56e">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property value="6" name="auxiliary;index"/>
+        </properties>
+        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#2">
+            <graphicalData height="0" width="0" y="0" x="0"/>
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="JMS" entity-id="JMS#3">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property name="topic"/>
+                    <property value="testqueue" name="queue"/>
+                    <property name="durableName"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="disableTemporaryReplyToDestinations"/>
+                    <property name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property value="7" name="auxiliary;index"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property value="SwiftMQ_JMS" name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="JMS" entity-id="JMS#4">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property value="testtopic" name="topic"/>
+                    <property name="queue"/>
+                    <property name="durableName"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="disableTemporaryReplyToDestinations"/>
+                    <property name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property value="8" name="auxiliary;index"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property value="SwiftMQ_JMS" name="connector-ref"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="OutputJMS" entity-id="2042cd85-b66f-4702-9a7b-1653f834da66">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property value="9" name="auxiliary;index"/>
+        </properties>
+        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#3">
+            <graphicalData height="0" width="0" y="0" x="0"/>
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/jms/endpoint" name="JMS" entity-id="JMS#5">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property value="testtopic" name="topic"/>
+                    <property name="queue"/>
+                    <property name="durableName"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="disableTemporaryReplyToDestinations"/>
+                    <property name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property value="10" name="auxiliary;index"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout"/>
+                    <property value="SwiftMQ_JMS" name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="org.mule.tooling.ui.modules.core.ajax.AJAX" name="Ajax" entity-id="Ajax#3">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property name="businessEventsLabel"/>
+                    <property name="messageCacheSize"/>
+                    <property name="disableTransportTransformer"/>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="cacheMessages"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property value="/outcome" name="channel"/>
+                    <property value="11" name="auxiliary;index"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property value="Ajax" name="connector-ref"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>

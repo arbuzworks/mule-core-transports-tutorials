@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="demo">
+    <flow SubFlow="false" name="file_component" entity-id="846f60ee-8aac-4355-9034-d9981348c853">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="auxiliary;index" value="1"/>
+            <property name="tracking:enable-default-events"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="OneWay" name="Input File" type="http://www.mulesoft.org/schema/mule/file/endpoint" entity-id="File#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="reverseOrder"/>
+                    <property name="moveToPattern"/>
+                    <property name="pollingFrequency" value="3000"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="comparator"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="exchange-pattern" value="one-way"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="moveToDirectory"/>
+                    <property name="address"/>
+                    <property name="fileAge"/>
+                    <property name="path" value="/Users/arbuzworks/tmp/input"/>
+                    <property name="encoding"/>
+                    <property name="outputPattern"/>
+                    <property name="responseTimeout" value="10000"/>
+                    <property name="auxiliary;index" value="2"/>
+                    <property name="mimeType" value="text/xml"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern name="XSLT" type="http://www.mulesoft.org/schema/mule/xml/xslt-transformer" entity-id="XSLT#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="auxiliary;erased;mimeType" value="true"/>
+                    <property name="returnClass" value=""/>
+                    <property name="xsl-file" value="/Users/arbuzworks/tmp/xsl/addresses.xsl"/>
+                    <property name="ignoreBadInput" value="false"/>
+                    <property name="maxActiveTransformers" value="5"/>
+                    <property name="maxIdleTransformers" value="2"/>
+                    <property name="uriResolver-ref" value=""/>
+                    <property name="updated"/>
+                    <property name="auxiliary;erased;encoding" value="true"/>
+                    <property name="encoding" value=""/>
+                    <property name="transformerFactoryClass" value=""/>
+                    <property name="xslt-text" value=""/>
+                    <property name="outputEncoding" value=""/>
+                    <property name="auxiliary;index" value="3"/>
+                    <property name="mimeType" value=""/>
+                    <property name="auxiliary;erased;outputEncoding" value="true"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/xml/xslt-text;1605057050">
+                        <property name="isProcessed$$$$" value="true"/>
+                        <property name="xslt-text" value=""/>
+                    </property-collection>
+                </properties>
+                <description></description>
+            </pattern>
+            <endpoint direction="Outbound" message-exchange-pattern="OneWay" name="VM" type="http://www.mulesoft.org/schema/mule/vm/endpoint" entity-id="VM#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="businessEventsLabel"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="exchange-pattern" value="one-way"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="path" value="xsl.mesg"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="mimeType" value="text/plain"/>
+                    <property name="responseTimeout" value="10000"/>
+                    <property name="auxiliary;index" value="4"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="vm_flow" entity-id="2f6c38e8-31ac-4da7-973d-9dfb2436b6e4">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="auxiliary;index" value="5"/>
+            <property name="tracking:enable-default-events"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#2">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="OneWay" name="VM" type="http://www.mulesoft.org/schema/mule/vm/endpoint" entity-id="VM#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="businessEventsLabel"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="exchange-pattern" value="one-way"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="path" value="xsl.mesg"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="mimeType" value="text/plain"/>
+                    <property name="responseTimeout" value="10000"/>
+                    <property name="auxiliary;index" value="6"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <endpoint direction="Outbound" message-exchange-pattern="OneWay" name="Output File" type="http://www.mulesoft.org/schema/mule/file/endpoint" entity-id="File#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="reverseOrder"/>
+                    <property name="moveToPattern"/>
+                    <property name="pollingFrequency"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="comparator"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="exchange-pattern" value="one-way"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="moveToDirectory"/>
+                    <property name="address"/>
+                    <property name="fileAge"/>
+                    <property name="path" value="/Users/arbuzworks/tmp/output"/>
+                    <property name="encoding"/>
+                    <property name="outputPattern" value="myfile#[function:datestamp].txt"/>
+                    <property name="responseTimeout" value="10000"/>
+                    <property name="auxiliary;index" value="7"/>
+                    <property name="mimeType"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>

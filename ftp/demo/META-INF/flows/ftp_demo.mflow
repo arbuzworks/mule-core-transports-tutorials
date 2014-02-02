@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="ftp_demo">
+    <flow SubFlow="false" name="downloadFtpFiles" entity-id="6b3b0fb3-b97b-42f3-b50a-c39ca4caa283">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property value="1" name="auxiliary;index"/>
+        </properties>
+        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#1">
+            <graphicalData height="0" width="0" y="0" x="0"/>
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/ee/ftp/endpoint" name="FTP" entity-id="FTP#1">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property value="${ftp.port}" name="port"/>
+                    <property name=""/>
+                    <property name="binary"/>
+                    <property value="${ftp.host}" name="host"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="pollingFrequency"/>
+                    <property name="disableTransportTransformer"/>
+                    <property value="${ftp.password}" name="password"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property value="${ftp.pathInbound}" name="path"/>
+                    <property name="passive"/>
+                    <property name="lll"/>
+                    <property value="${ftp.user}" name="user"/>
+                    <property name="outputPattern"/>
+                    <property name="mimeType"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property value="2" name="auxiliary;index"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/file/endpoint" name="File" entity-id="File#1">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property name="reverseOrder"/>
+                    <property name="moveToPattern"/>
+                    <property name="pollingFrequency"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="comparator"/>
+                    <property name="disableTransportTransformer"/>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="moveToDirectory"/>
+                    <property name="address"/>
+                    <property name="fileAge"/>
+                    <property value="${file.outboundEndpoint}" name="path"/>
+                    <property name="encoding"/>
+                    <property name="outputPattern"/>
+                    <property name="mimeType"/>
+                    <property value="3" name="auxiliary;index"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="uploadFtpFiles" entity-id="016b105e-adec-4b0d-8e99-af12e16bb849">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property value="4" name="auxiliary;index"/>
+        </properties>
+        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#2">
+            <graphicalData height="0" width="0" y="0" x="0"/>
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/file/endpoint" name="File" entity-id="File#2">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property name="reverseOrder"/>
+                    <property name="moveToPattern"/>
+                    <property name="pollingFrequency"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="comparator"/>
+                    <property name="disableTransportTransformer"/>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="moveToDirectory"/>
+                    <property name="address"/>
+                    <property name="fileAge"/>
+                    <property value="${file.inboundEndpoint}" name="path"/>
+                    <property name="encoding"/>
+                    <property name="outputPattern"/>
+                    <property name="mimeType"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/ee/ftp/endpoint" name="FTP" entity-id="FTP#2">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property value="${ftp.port}" name="port"/>
+                    <property name=""/>
+                    <property name="binary"/>
+                    <property value="${ftp.host}" name="host"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="pollingFrequency"/>
+                    <property name="disableTransportTransformer"/>
+                    <property value="${ftp.password}" name="password"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property value="${ftp.pathOutbound}" name="path"/>
+                    <property name="passive"/>
+                    <property name="lll"/>
+                    <property value="${ftp.user}" name="user"/>
+                    <property name="outputPattern"/>
+                    <property name="mimeType"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property value="6" name="auxiliary;index"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:sr="http://www.mulesoft.org/schema/mule/service-registry" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/service-registry http://www.mulesoft.org/schema/mule/service-registry/current/mule-service-registry.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+    <flow name="MainFlow" doc:name="MainFlow">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8090" doc:name="HTTP"/>
+        <dynamic-first-successful doc:name="Anypoint Service Registry">
+            <sr:service-lookup serviceRoundRobin="true" serviceName="gfs-regional-vendor-assignment-service" serviceVersion="1.0.0">
+                <sr:metadata key="region" value="NorthAmerica"/>
+            </sr:service-lookup>
+        </dynamic-first-successful>
+    </flow>
+    <flow name="Vendor1" doc:name="Vendor1">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8091" path="services/Vendor1/PriceTrack" doc:name="HTTP"/>
+        <set-payload value="Dynamic router chose Vendor 1." doc:name="Set Payload"/>
+    </flow>
+    <flow name="Vendor2" doc:name="Vendor2">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8092" path="services/Vendor2/PriceTrack" doc:name="HTTP"/>
+        <set-payload value="Dynamic router chose Vendor 2." doc:name="Set Payload"/>
+    </flow>
+</mule>

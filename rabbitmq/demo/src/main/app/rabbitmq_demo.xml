@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:amqp="http://www.mulesoft.org/schema/mule/amqp" xmlns:ajax="http://www.mulesoft.org/schema/mule/ajax" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ajax http://www.mulesoft.org/schema/mule/ajax/current/mule-ajax.xsd
+http://www.mulesoft.org/schema/mule/amqp http://www.mulesoft.org/schema/mule/amqp/current/mule-amqp.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+    <ajax:connector name="Ajax" serverUrl="http://localhost:8080/rabbitmq" resourceBase="${app.home}/www" jsonCommented="true" doc:name="Ajax"/>
+    <amqp:connector name="AMQP_Connector" validateConnections="true" host="arbuzworks" port="1111" fallbackAddresses="localhost:5672" doc:name="AMQP Connector"/>
+    <flow name="IncomeFlow" doc:name="IncomeFlow">
+        <ajax:inbound-endpoint channel="/income" responseTimeout="10000" connector-ref="Ajax" doc:name="Ajax"/>
+        <set-payload value="#[payload:]" doc:name="Set Payload"/>
+        <amqp:outbound-endpoint responseTimeout="10000"  doc:name="AMQP" connector-ref="AMQP_Connector" queueName="test.queue"/>
+        <amqp:outbound-endpoint exchangeName="test.topic" responseTimeout="10000" connector-ref="AMQP_Connector" doc:name="AMQP"/>
+    </flow>
+    <flow name="OutcomeFlow" doc:name="OutcomeFlow">
+        <amqp:inbound-endpoint exchangeName="test.topic" responseTimeout="10000" connector-ref="AMQP_Connector" doc:name="AMQP"/>
+        <byte-array-to-string-transformer doc:name="Byte Array to String"/>
+        <ajax:outbound-endpoint channel="/outcome" responseTimeout="10000" connector-ref="Ajax" doc:name="Ajax"/>
+    </flow>
+</mule>

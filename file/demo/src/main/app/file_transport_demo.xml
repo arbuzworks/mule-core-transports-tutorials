@@ -1,0 +1,14 @@
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:spring="http://www.springframework.org/schema/beans"
+      xmlns:file="http://www.mulesoft.org/schema/mule/file"
+      xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd" version="EE-3.4.0">
+ 
+    <file:connector name="input" autoDelete="false" doc:name="File"/>
+     
+    <flow name="copyFile" doc:name="copyFile">
+        <file:inbound-endpoint connector-ref="input" path="/Users/arbuzworks/tmp/input" doc:name="Input" responseTimeout="10000"/>
+    </flow>
+</mule>

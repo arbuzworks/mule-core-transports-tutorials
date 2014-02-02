@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="demo">
+    <global-element name="Bean" type="http://www.springframework.org/schema/beans/bean" entity-id="Bean#1">
+        <properties>
+            <property name="factory-bean"/>
+            <property name="abstract"/>
+            <property name="scope"/>
+            <property name="init-method"/>
+            <property name="autowire-candidate"/>
+            <property name="factory-method"/>
+            <property name="class" value="org.mule.example.rmi.MuleRMIFactory"/>
+            <property name="parent"/>
+            <property name="children"/>
+            <property name="lazy-init"/>
+            <property name="auxiliary;wrappedIn" value="beans@spring@http://www.springframework.org/schema/beans"/>
+            <property name="id" value="jndiFactory"/>
+            <property name="primary"/>
+            <property name="name" value="jndiFactory"/>
+            <property name="autowire"/>
+            <property name="destroy-method"/>
+            <property name="auxiliary;index" value="2"/>
+            <property name="auxiliary;wrapIn" value="1"/>
+            <property name="depends-on"/>
+        </properties>
+    </global-element>
+    <global-element name="Bean" type="http://www.springframework.org/schema/beans/bean" entity-id="Bean#2">
+        <properties>
+            <property name="factory-bean" value="jndiFactory"/>
+            <property name="abstract"/>
+            <property name="scope"/>
+            <property name="init-method"/>
+            <property name="autowire-candidate"/>
+            <property name="factory-method" value="create"/>
+            <property name="class"/>
+            <property name="parent"/>
+            <property name="children"/>
+            <property name="lazy-init"/>
+            <property name="auxiliary;wrappedIn" value="beans@spring@http://www.springframework.org/schema/beans"/>
+            <property name="id" value="jndiContext"/>
+            <property name="primary"/>
+            <property name="name" value="jndiContext"/>
+            <property name="autowire"/>
+            <property name="destroy-method"/>
+            <property name="auxiliary;index" value="3"/>
+            <property name="auxiliary;wrapIn" value="1"/>
+            <property name="depends-on"/>
+        </properties>
+    </global-element>
+    <global-element name="RMI" type="http://www.mulesoft.org/schema/mule/rmi/connector" entity-id="RMI#1">
+        <properties>
+            <property name="pollingFrequency"/>
+            <property name="jndiInitialFactory"/>
+            <property name="jndiProviderUrl"/>
+            <property name="securityPolicy" value="policy.all"/>
+            <property name="validateConnections" value="true"/>
+            <property name="dispatcherPoolFactory-ref"/>
+            <property name="jndiContext-ref" value="jndiContext"/>
+            <property name="securityManager-ref"/>
+            <property name="serverClassName"/>
+            <property name="name" value="RMI"/>
+            <property name="serverCodebase"/>
+            <property name="dynamicNotification"/>
+            <property name="jndiUrlPkgPrefixes"/>
+            <property name="auxiliary;index" value="4"/>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="demoFlow1" entity-id="e1c29ebf-7bab-4ad5-b3d5-d471bf885b05">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="5"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="RequestResponse" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="port" value="8081"/>
+                    <property name="host" value="localhost"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="followRedirects"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
+                    <property name="keep-alive"/>
+                    <property name="contentType"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="password"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="httpLabel"/>
+                    <property name="address"/>
+                    <property name="path" value="rmi"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="method"/>
+                    <property name="user"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="6"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <endpoint direction="Outbound" message-exchange-pattern="RequestResponse" name="RMI" type="http://www.mulesoft.org/schema/mule/rmi/endpoint" entity-id="RMI#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="port" value="2000"/>
+                    <property name="host" value="localhost"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="object" value="org.mule.example.rmi.Hello"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="method" value="sayHello"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="7"/>
+                    <property name="methodArgumentTypes"/>
+                    <property name="responseTimeout" value="10000"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>

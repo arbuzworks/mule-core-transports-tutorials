@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:https="http://www.mulesoft.org/schema/mule/https" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/https http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd">
+    <http:connector name="HTTP_HTTPS" cookieSpec="netscape" validateConnections="true" sendBufferSize="0" receiveBufferSize="0" receiveBacklog="0" clientSoTimeout="10000" serverSoTimeout="10000" socketSoLinger="0" proxyHostname="10.10.0.102" doc:name="HTTP\HTTPS" proxyPort="8080"/>
+    <https:connector name="httpsConnector" cookieSpec="netscape" validateConnections="true" sendBufferSize="0" receiveBufferSize="0" receiveBacklog="0" clientSoTimeout="10000" serverSoTimeout="10000" socketSoLinger="0" doc:name="HTTP\HTTPS">
+        <https:tls-key-store path="${keystore.path}" keyPassword="${key.pass}" storePassword="${store.pass}"/>
+    </https:connector>
+    <flow name="mule-http-testFlow1" doc:name="mule-http-testFlow1">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="hello" doc:name="HTTP"/>
+        <logger message="Payload is: #[message:payload]
+Query string is: #[header:INBOUND:http.query.string]
+Param name is: #[header:INBOUND:name]" level="INFO" doc:name="Logger"/>
+        <set-payload value="Hello #[header:INBOUND:name]" doc:name="Set Payload"/>
+    </flow>
+    <flow name="http-static-test" doc:name="http-static-test">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="static" doc:name="HTTP"/>
+        <http:static-resource-handler resourceBase="${app.home}/docroot"  defaultFile="test.html"/>
+    </flow>
+    <flow name="google-test" doc:name="google-test">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="google" doc:name="HTTP"/>
+        <http:outbound-endpoint exchange-pattern="request-response" host="www.google.com" port="80" path="search?q=#[header:INBOUND:query]" method="GET" connector-ref="HTTP_HTTPS" doc:name="HTTP"/>
+    </flow>
+    <flow name="mule-http-testFlow2" doc:name="mule-http-testFlow2">
+        <https:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8443" path="secure" connector-ref="httpsConnector" doc:name="HTTP"/>
+        <set-payload value="Secure content" doc:name="Set Payload"/>
+    </flow>
+</mule>

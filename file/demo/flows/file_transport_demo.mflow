@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="file_transport_demo">
+    <global-element name="File" type="org.mule.tooling.ui.modules.core.global.fileConnector" entity-id="File#1">
+        <properties>
+            <property name="streaming"/>
+            <property name="reverseOrder"/>
+            <property name="moveToPattern"/>
+            <property name="workFileNamePattern"/>
+            <property name="workDirectory"/>
+            <property name="outputAppend"/>
+            <property name="pollingFrequency"/>
+            <property name="readFromDirectory"/>
+            <property name="validateConnections"/>
+            <property name="comparator"/>
+            <property name="writeToDirectory"/>
+            <property name="dispatcherPoolFactory-ref"/>
+            <property name="serialiseObjects"/>
+            <property name="moveToDirectory"/>
+            <property name="fileAge"/>
+            <property name="recursive"/>
+            <property name="name" value="input"/>
+            <property name="autoDelete" value="false"/>
+            <property name="dynamicNotification"/>
+            <property name="outputPattern"/>
+            <property name="auxiliary;index" value="1"/>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="copyFile" entity-id="46e6e1b8-2515-47e6-baf6-751fa2c5704f">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="2"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="OneWay" name="Input" type="http://www.mulesoft.org/schema/mule/file/endpoint" entity-id="File#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="reverseOrder"/>
+                    <property name="moveToPattern"/>
+                    <property name="pollingFrequency"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="comparator"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="exchange-pattern" value="one-way"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="moveToDirectory"/>
+                    <property name="address"/>
+                    <property name="fileAge"/>
+                    <property name="encoding"/>
+                    <property name="path" value="/Users/arbuzworks/tmp/input"/>
+                    <property name="outputPattern"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="3"/>
+                    <property name="responseTimeout" value="10000"/>
+                    <property name="connector-ref" value="input"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>

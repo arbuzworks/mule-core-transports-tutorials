@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:rmi="http://www.mulesoft.org/schema/mule/rmi" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/rmi http://www.mulesoft.org/schema/mule/rmi/current/mule-rmi.xsd">
+    <spring:beans>
+        <spring:bean id="jndiFactory" name="jndiFactory" class="org.mule.example.rmi.MuleRMIFactory"/>
+        <spring:bean id="jndiContext" name="jndiContext" factory-method="create" factory-bean="jndiFactory"/>
+    </spring:beans>
+    <rmi:connector name="RMI" securityPolicy="policy.all" validateConnections="true" jndiContext-ref="jndiContext" doc:name="RMI"/>
+    <flow name="demoFlow1" doc:name="demoFlow1">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="rmi" doc:name="HTTP"/>
+        <rmi:outbound-endpoint exchange-pattern="request-response" host="localhost" port="2000" object="org.mule.example.rmi.Hello" method="sayHello" responseTimeout="10000" doc:name="RMI"/>
+    </flow>
+</mule>

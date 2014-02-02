@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="demo">
+    <global-element name="TCP Polling" type="http://www.mulesoft.org/schema/mule/tcp/polling-connector" entity-id="TCP Polling#1">
+        <properties>
+            <property name="reuseAddress"/>
+            <property name="receiveBacklog" value="0"/>
+            <property name="pollingFrequency"/>
+            <property name="serverSoTimeout" value="10000"/>
+            <property name="socketSoLinger" value="0"/>
+            <property name="clientSoTimeout" value="10000"/>
+            <property name="validateConnections" value="true"/>
+            <property name="keepAlive"/>
+            <property name="sendTcpNoDelay"/>
+            <property name="dispatcherPoolFactory-ref"/>
+            <property name="receiveBufferSize" value="0"/>
+            <property name="name" value="TCP_Polling"/>
+            <property name="dispatcherFactory-ref"/>
+            <property name="keepSendSocketOpen"/>
+            <property name="dynamicNotification"/>
+            <property name="sendBufferSize" value="0"/>
+            <property name="auxiliary;index" value="1"/>
+            <property name="timeout"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/tcp/direct-protocol;0">
+                <property name="payloadOnly" value="true"/>
+                <property name="isProcessed$$$$" value="true"/>
+                <property name="auxiliary;index" value="2"/>
+                <property name="auxiliary;wrapIn" value="2"/>
+            </property-collection>
+        </properties>
+    </global-element>
+    <global-element name="TCP connector" type="http://www.mulesoft.org/schema/mule/tcp/connector" entity-id="TCP connector#1">
+        <properties>
+            <property name="reuseAddress"/>
+            <property name="receiveBacklog" value="0"/>
+            <property name="serverSoTimeout" value="10000"/>
+            <property name="socketSoLinger" value="0"/>
+            <property name="clientSoTimeout" value="10000"/>
+            <property name="validateConnections" value="true"/>
+            <property name="keepAlive"/>
+            <property name="sendTcpNoDelay"/>
+            <property name="dispatcherPoolFactory-ref"/>
+            <property name="receiveBufferSize" value="0"/>
+            <property name="name" value="TCP"/>
+            <property name="dispatcherFactory-ref"/>
+            <property name="keepSendSocketOpen"/>
+            <property name="dynamicNotification"/>
+            <property name="sendBufferSize" value="0"/>
+            <property name="auxiliary;index" value="3"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/tcp/direct-protocol;0">
+                <property name="payloadOnly" value="true"/>
+                <property name="isProcessed$$$$" value="true"/>
+                <property name="auxiliary;index" value="4"/>
+                <property name="auxiliary;wrapIn" value="4"/>
+            </property-collection>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="Polling" entity-id="d89115e2-cdc0-4ea4-a117-eed2a0baca58">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="5"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="RequestResponse" name="TCP" type="http://www.mulesoft.org/schema/mule/tcp/endpoint" entity-id="TCP#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="port" value="17"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="host" value="ota.iambic.com"/>
+                    <property name="address"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout" value="10000"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="auxiliary;index" value="6"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="connector-ref" value="TCP_Polling"/>
+                </properties>
+            </endpoint>
+            <pattern name="Byte Array to String" type="http://www.mulesoft.org/schema/mule/core/byte-array-to-string-transformer" entity-id="Byte Array to String#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="7"/>
+                </properties>
+            </pattern>
+            <pattern name="Logger" type="http://www.mulesoft.org/schema/mule/core/logger" entity-id="Logger#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="message" value="#[payload]"/>
+                    <property name="category"/>
+                    <property name="level" value="INFO"/>
+                    <property name="auxiliary;index" value="8"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="Echo" entity-id="17e582e2-445d-436d-a2b4-fecb49df6e62">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="9"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#2">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="RequestResponse" name="TCP" type="http://www.mulesoft.org/schema/mule/tcp/endpoint" entity-id="TCP#2">
+                <graphicalData x="19" y="334" width="68" height="169"/>
+                <properties>
+                    <property name="port" value="4444"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="host" value="localhost"/>
+                    <property name="address"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="mimeType"/>
+                    <property name="responseTimeout" value="10000"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="auxiliary;index" value="10"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="connector-ref" value="TCP"/>
+                </properties>
+            </endpoint>
+            <pattern name="Byte Array to String" type="http://www.mulesoft.org/schema/mule/core/byte-array-to-string-transformer" entity-id="5fa0deee-cab4-49b4-aa15-1e36573399f6">
+                <graphicalData x="147" y="334" width="118" height="67"/>
+            </pattern>
+            <pattern name="Set Payload" type="http://www.mulesoft.org/schema/mule/core/set-payload" entity-id="3c3cfeae-0576-438a-871c-c2bd2633fa29">
+                <graphicalData x="325" y="334" width="75" height="67"/>
+                <properties>
+                    <property name="updated"/>
+                    <property name="value" value="Hello #[payload]"/>
+                </properties>
+                <description></description>
+            </pattern>
+            <pattern name="String to Byte Array" type="http://www.mulesoft.org/schema/mule/core/string-to-byte-array-transformer" entity-id="ae7c1883-468d-45f9-a378-8d051cf209d2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+            </pattern>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>

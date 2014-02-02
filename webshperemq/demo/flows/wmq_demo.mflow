@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="wmq_demo">
+    <global-element type="org.mule.tooling.ui.modules.core.global.wmqConnector" name="WMQ Connector" entity-id="WMQ Connector#1">
+        <properties>
+            <property name="sendExitHandler"/>
+            <property value="${wmq.port}" name="port"/>
+            <property name="temporaryModel"/>
+            <property name="useRemoteQueueDefinitions"/>
+            <property name="jndiProviderUrl"/>
+            <property name="embeddedMode"/>
+            <property name="redeliveryHandlerFactory-ref"/>
+            <property name="connectionFactory-ref"/>
+            <property name="durable"/>
+            <property name="maxRedelivery"/>
+            <property value="${wmq.password} " name="password"/>
+            <property value="${wmq.username}" name="username"/>
+            <property value="wmqConnector" name="name"/>
+            <property value="${wmq.host}" name="hostName"/>
+            <property name="dynamicNotification"/>
+            <property name="receiveExitHandler"/>
+            <property name="noLocal"/>
+            <property value="1" name="auxiliary;index"/>
+            <property name="sendExitHandlerInit"/>
+            <property name="eagerConsumer"/>
+            <property name="numberOfConsumers"/>
+            <property name="acknowledgementMode"/>
+            <property name="jndiInitialFactory"/>
+            <property name="securityExitHandlerInit"/>
+            <property value="${wmq.queue.manager}" name="queueManager"/>
+            <property value="http://www.mulesoft.org/schema/mule/ee/wmq/connector" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+            <property value="true" name="validateConnections"/>
+            <property name="propagateMQEvents"/>
+            <property name="disableTemporaryReplyToDestinations"/>
+            <property name="clientId"/>
+            <property name="ccsId"/>
+            <property name="dispatcherPoolFactory-ref"/>
+            <property name="persistentDelivery"/>
+            <property name="securityExitHandler"/>
+            <property name="forceJndiDestinations"/>
+            <property name="receiveExitHandlerInit"/>
+            <property name="specification"/>
+            <property name="connectionFactoryJndiName"/>
+            <property name="jndiDestinations"/>
+            <property name="honorQosHeaders"/>
+            <property name="cacheJmsSessions"/>
+            <property name="targetClient"/>
+            <property name="channel"/>
+            <property name="transportType"/>
+            <property name="jndiProviderProperties-ref"/>
+        </properties>
+    </global-element>
+    <global-element type="org.mule.tooling.ui.modules.core.global.ajaxConnector" name="Ajax" entity-id="Ajax#1">
+        <properties>
+            <property name="maxInterval"/>
+            <property name="jsonCommented"/>
+            <property name="interval"/>
+            <property name="logLevel"/>
+            <property value="ajaxServer" name="name"/>
+            <property name="refsThreshold"/>
+            <property value="true" name="disableReplyTo"/>
+            <property name="multiFrameInterval"/>
+            <property value="${app.home}/docroot" name="resourceBase"/>
+            <property name="timeout"/>
+            <property value="3" name="auxiliary;index"/>
+            <property value="http://0.0.0.0:8086/services/wmqExample" name="serverUrl"/>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="InputJMS" entity-id="6e33fd24-c4ec-4c2e-ac25-92a2967047ae">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property value="4" name="auxiliary;index"/>
+        </properties>
+        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#1">
+            <graphicalData height="0" width="0" y="0" x="0"/>
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="org.mule.tooling.ui.modules.core.ajax.AJAX" name="Ajax" entity-id="Ajax#2">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property name="businessEventsLabel"/>
+                    <property name="messageCacheSize"/>
+                    <property name="disableTransportTransformer"/>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="cacheMessages"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property value="/services/enqueue" name="channel"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern type="http://www.mulesoft.org/schema/mule/core/message-properties-transformer" name="Message Properties" entity-id="Message Properties#1">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="scope"/>
+                    <property name="overwrite"/>
+                    <property name="encoding"/>
+                    <property name="mimeType"/>
+                    <property value="6" name="auxiliary;index"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/core/delete-message-property;0">
+                        <property value="MULE_REPLYTO" name="key"/>
+                        <property value="7" name="auxiliary;index"/>
+                        <property value="7" name="auxiliary;wrapIn"/>
+                    </property-collection>
+                </properties>
+            </pattern>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/ee/wmq/endpoint" name="WMQ" entity-id="WMQ#1">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property value="in" name="queue"/>
+                    <property name="correlationId"/>
+                    <property name="characterSet"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="messageType"/>
+                    <property name="disableTemporaryReplyToDestinations"/>
+                    <property name="timeToLive"/>
+                    <property name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="persistentDelivery"/>
+                    <property name="address"/>
+                    <property name="priority"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="targetClient"/>
+                    <property value="8" name="auxiliary;index"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property value="wmqConnector" name="connector-ref"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="JMSProcessor" entity-id="c3c26de5-73c6-40ef-b517-a5c480e75d6c">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property value="9" name="auxiliary;index"/>
+        </properties>
+        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#2">
+            <graphicalData height="0" width="0" y="0" x="0"/>
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/ee/wmq/endpoint" name="WMQ" entity-id="WMQ#2">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property value="in" name="queue"/>
+                    <property name="correlationId"/>
+                    <property name="characterSet"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="messageType"/>
+                    <property name="disableTemporaryReplyToDestinations"/>
+                    <property name="timeToLive"/>
+                    <property name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="persistentDelivery"/>
+                    <property name="address"/>
+                    <property name="priority"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="targetClient"/>
+                    <property value="10" name="auxiliary;index"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property value="wmqConnector" name="connector-ref"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/ee/wmq/transaction;0">
+                        <property value="NONE" name="action2"/>
+                        <property value="NONE" name="action1"/>
+                        <property value="11" name="auxiliary;index"/>
+                        <property value="11" name="auxiliary;wrapIn"/>
+                    </property-collection>
+                </properties>
+            </endpoint>
+            <unknown index="12" description="false" entity-id="unknown#1">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <content>&lt;test-component xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; appendString=&quot; - processed&quot; logMessageDetails=&quot;true&quot; waitTime=&quot;15000&quot;/&gt;</content>
+            </unknown>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="http://www.mulesoft.org/schema/mule/ee/wmq/endpoint" name="WMQ" entity-id="WMQ#3">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property value="out" name="queue"/>
+                    <property name="correlationId"/>
+                    <property name="characterSet"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="messageType"/>
+                    <property name="disableTemporaryReplyToDestinations"/>
+                    <property name="timeToLive"/>
+                    <property name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="persistentDelivery"/>
+                    <property name="address"/>
+                    <property name="priority"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="targetClient"/>
+                    <property value="13" name="auxiliary;index"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property value="wmqConnector" name="connector-ref"/>
+                    <property-collection name="@http://www.mulesoft.org/schema/mule/ee/wmq/transaction;0">
+                        <property value="NONE" name="action2"/>
+                        <property value="NONE" name="action1"/>
+                        <property value="14" name="auxiliary;index"/>
+                        <property value="14" name="auxiliary;wrapIn"/>
+                    </property-collection>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="JMSOutput" entity-id="b99204c7-7015-44e5-ba56-28af25365750">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property value="15" name="auxiliary;index"/>
+        </properties>
+        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#3">
+            <graphicalData height="0" width="0" y="0" x="0"/>
+            <endpoint message-exchange-pattern="OneWay" direction="Inbound" type="http://www.mulesoft.org/schema/mule/ee/wmq/endpoint" name="WMQ" entity-id="WMQ#4">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property value="out" name="queue"/>
+                    <property name="correlationId"/>
+                    <property name="characterSet"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="messageType"/>
+                    <property name="disableTemporaryReplyToDestinations"/>
+                    <property name="timeToLive"/>
+                    <property name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="persistentDelivery"/>
+                    <property name="address"/>
+                    <property name="priority"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="targetClient"/>
+                    <property value="16" name="auxiliary;index"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property value="wmqConnector" name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <endpoint message-exchange-pattern="OneWay" direction="Outbound" type="org.mule.tooling.ui.modules.core.ajax.AJAX" name="Ajax" entity-id="Ajax#3">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property name="businessEventsLabel"/>
+                    <property name="messageCacheSize"/>
+                    <property name="disableTransportTransformer"/>
+                    <property value="one-way" name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property value="true" name="cacheMessages"/>
+                    <property name="address"/>
+                    <property name="encoding"/>
+                    <property value="/services/dequeue" name="channel"/>
+                    <property value="17" name="auxiliary;index"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>

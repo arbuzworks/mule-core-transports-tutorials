@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="jetty_demo">
+    <flow SubFlow="false" name="JettyHello" entity-id="b9127951-123c-4677-b340-15500f0a6a73">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property value="1" name="auxiliary;index"/>
+        </properties>
+        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#1">
+            <graphicalData height="0" width="0" y="0" x="0"/>
+            <endpoint message-exchange-pattern="RequestResponse" direction="Inbound" type="http://www.mulesoft.org/schema/mule/jetty-ssl/endpoint" name="Jetty" entity-id="Jetty#1">
+                <graphicalData height="173" width="68" y="140" x="19"/>
+                <properties>
+                    <property value="true" name="auxiliary;erased;contentType"/>
+                    <property value="8081" name="port"/>
+                    <property value="" name="host"/>
+                    <property value="" name="businessEventsLabel"/>
+                    <property value="http://www.mulesoft.org/schema/mule/jetty/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property value="false" name="keep-alive"/>
+                    <property value="" name="contentType"/>
+                    <property value="false" name="disableTransportTransformer"/>
+                    <property value="" name="password"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property value="false" name="tracking:enable-default-events"/>
+                    <property value="" name="ref"/>
+                    <property value="" name="transformer-refs"/>
+                    <property name="updated"/>
+                    <property value="http://localhost:8090/hello" name="address"/>
+                    <property value="true" name="auxiliary;erased;encoding"/>
+                    <property value="" name="encoding"/>
+                    <property value="" name="path"/>
+                    <property value="" name="responseTransformer-refs"/>
+                    <property value="" name="user"/>
+                    <property value="2" name="auxiliary;index"/>
+                    <property value="text/plain" name="mimeType"/>
+                    <property value="10000" name="responseTimeout"/>
+                    <property value="" name="connector-ref"/>
+                </properties>
+                <description></description>
+            </endpoint>
+            <pattern type="http://www.mulesoft.org/schema/mule/core/logger" name="Logger" entity-id="332dd763-3528-496d-a450-2c10a4d02327">
+                <graphicalData height="0" width="0" y="0" x="0"/>
+                <properties>
+                    <property value="Param name is: #[header:INBOUND:name]" name="message"/>
+                    <property value="" name="category"/>
+                    <property value="INFO" name="level"/>
+                    <property name="updated"/>
+                </properties>
+                <description></description>
+            </pattern>
+            <pattern type="http://www.mulesoft.org/schema/mule/core/set-payload" name="Set Payload" entity-id="Set Payload#1">
+                <graphicalData height="71" width="93" y="140" x="147"/>
+                <properties>
+                    <property name="updated"/>
+                    <property value="Hello, #[header:INBOUND:name]!" name="value"/>
+                    <property value="3" name="auxiliary;index"/>
+                </properties>
+                <description></description>
+            </pattern>
+        </lane>
+    </flow>
+    <flow SubFlow="false" name="JettyStatic" entity-id="33037674-e1db-4264-bdac-192678be5d3f">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property value="4" name="auxiliary;index"/>
+        </properties>
+        <lane isChoiceOtherwiseLane="false" index="0" hadOnlyOneElement="false" entity-id="compartment-lane#2">
+            <graphicalData height="0" width="0" y="0" x="0"/>
+            <endpoint message-exchange-pattern="RequestResponse" direction="Inbound" type="http://www.mulesoft.org/schema/mule/jetty-ssl/endpoint" name="Jetty" entity-id="Jetty#2">
+                <graphicalData height="234" width="68" y="393" x="19"/>
+                <properties>
+                    <property name="port"/>
+                    <property name="host"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="followRedirects"/>
+                    <property value="http://www.mulesoft.org/schema/mule/jetty/endpoint" name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute"/>
+                    <property name="keep-alive"/>
+                    <property name="contentType"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="password"/>
+                    <property value="request-response" name="exchange-pattern"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property value="http://localhost:8090/static" name="address"/>
+                    <property name="path"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="method"/>
+                    <property name="user"/>
+                    <property name="responseTimeout"/>
+                    <property value="5" name="auxiliary;index"/>
+                    <property name="mimeType"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <unknown index="6" description="false" entity-id="unknown#1">
+                <graphicalData height="65" width="203" y="396" x="444"/>
+                <content>&lt;http:static-resource-handler xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; resourceBase=&quot;${app.home}/www&quot; defaultFile=&quot;index.html&quot;/&gt;</content>
+            </unknown>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>

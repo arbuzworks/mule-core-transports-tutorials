@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd">
+    <file:connector name="File" autoDelete="true" streaming="true" validateConnections="true" doc:name="File"/>
+    <jms:weblogic-connector name="Web_logic_JMS" validateConnections="true" jndiInitialFactory="weblogic.jndi.WLInitialContextFactory" jndiProviderUrl="t3://localhost:7001" connectionFactoryJndiName="jms/TestConnectionFactory" clientId="mule_test" doc:name="Web logic JMS"/>
+    <flow name="WeblogicQueueTesting" doc:name="WeblogicQueueTesting">
+        <file:inbound-endpoint path="/Users/arbuzworks/Desktop/input" responseTimeout="10000" doc:name="Input File"/>
+        <file:file-to-string-transformer doc:name="File to String"/>
+        <jms:outbound-endpoint queue="jms/TestJMSQueue" connector-ref="Web_logic_JMS" doc:name="JMS"/>
+    </flow>
+    <flow name="WeblogicTopicTesting" doc:name="WeblogicTopicTesting">
+        <jms:inbound-endpoint topic="jms/TestJMSTopic" durableName="mulesoft" connector-ref="Web_logic_JMS" doc:name="JMS"/>
+        <string-to-byte-array-transformer doc:name="String to Byte Array"/>
+        <file:outbound-endpoint path="/Users/arbuzworks/Desktop/output" outputPattern="weblogic_test.txt" responseTimeout="10000" doc:name="Output File"/>
+    </flow>
+</mule>
