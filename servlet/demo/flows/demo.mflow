@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="demo">
+    <global-element name="Jetty" type="http://www.mulesoft.org/schema/mule/jetty-ssl/connector" entity-id="!!!8a61e6c9-6e74-4fa1-9efe-f30beeefffac">
+        <properties>
+            <property name="port" value="8083"/>
+            <property name="systemClasses" value=""/>
+            <property name="d" value=""/>
+            <property name="host" value=""/>
+            <property name="auxiliary;erased;host" value="true"/>
+            <property name="customReconnection" value="false"/>
+            <property name="standardReconnection" value="false"/>
+            <property name="useContinuations" value="false"/>
+            <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/jetty/connector"/>
+            <property name="resourceBase" value=""/>
+            <property name="noReconnection" value="true"/>
+            <property name="serverClasses" value=""/>
+            <property name="blocking" value="true"/>
+            <property name="configFile" value=""/>
+            <property name="directory" value="${app.home}/webapps"/>
+            <property name="name" value="jettyConnector"/>
+            <property-collection name="">
+                <property name="blocking" value="true"/>
+                <property name="d" value=""/>
+                <property name="customReconnection" value="false"/>
+                <property name="standardReconnection" value="false"/>
+                <property name="noReconnection" value="true"/>
+            </property-collection>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/jetty-ssl/tls-client;803245077"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/jetty-ssl/tls-key-store;1057804097"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/jetty-ssl/tls-protocol-handler;447018636"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/jetty-ssl/tls-server;1643828413"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/jetty/webapps;1256058041">
+                <property name="port" value="8083"/>
+                <property name="systemClasses" value=""/>
+                <property name="host" value=""/>
+                <property name="auxiliary;erased;host" value="true"/>
+                <property name="directory" value="${app.home}/webapps"/>
+                <property name="isProcessed$$$$" value="true"/>
+                <property name="serverClasses" value=""/>
+            </property-collection>
+        </properties>
+        <description></description>
+    </global-element>
+    <description></description>
+</mule-configuration>
