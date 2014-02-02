@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<mule-configuration xmlns="http://www.mulesoft.com/tooling/messageflow" name="demo">
+    <global-element name="LDAP" type="http://www.mulesoft.org/schema/mule/ldap/config" entity-id="LDAP#1">
+        <properties>
+            <property name="maxPoolSize"/>
+            <property name="authentication" value="simple"/>
+            <property name="authPassword" value="${ldap.password}"/>
+            <property name="referral"/>
+            <property name="name" value="Ldap"/>
+            <property name="initialPoolSize"/>
+            <property name="type"/>
+            <property name="authDn" value="${ldap.userDn}"/>
+            <property name="url" value="${ldap.url}"/>
+            <property name="auxiliary;index" value="1"/>
+            <property name="poolTimeout"/>
+            <property-collection name="@http://www.mulesoft.org/schema/mule/ldap/connection-pooling-profile;0">
+                <property name="exhaustedAction" value="WHEN_EXHAUSTED_GROW"/>
+                <property name="auxiliary;index" value="2"/>
+                <property name="auxiliary;wrapIn" value="2"/>
+                <property name="initialisationPolicy" value="INITIALISE_ONE"/>
+            </property-collection>
+        </properties>
+    </global-element>
+    <flow SubFlow="false" name="search" entity-id="0d4c98eb-ff99-4716-b092-1c3cb14ddd66">
+        <properties>
+            <property name="processingStrategy"/>
+            <property name="processingStrategy2"/>
+            <property name="bussinessEventsLabel"/>
+            <property name="tracking:enable-default-events"/>
+            <property name="auxiliary;index" value="3"/>
+        </properties>
+        <lane hadOnlyOneElement="false" index="0" isChoiceOtherwiseLane="false" entity-id="compartment-lane#1">
+            <graphicalData x="0" y="0" width="0" height="0"/>
+            <endpoint direction="Inbound" message-exchange-pattern="RequestResponse" name="HTTP" type="http://www.mulesoft.org/schema/mule/http/endpoint" entity-id="HTTP#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="port" value="8081"/>
+                    <property name="host" value="localhost"/>
+                    <property name="businessEventsLabel"/>
+                    <property name="followRedirects"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/http/endpoint"/>
+                    <property name="keep-alive"/>
+                    <property name="contentType"/>
+                    <property name="disableTransportTransformer"/>
+                    <property name="password"/>
+                    <property name="exchange-pattern" value="request-response"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="ref"/>
+                    <property name="transformer-refs"/>
+                    <property name="httpLabel"/>
+                    <property name="address"/>
+                    <property name="path" value="ldapSearch"/>
+                    <property name="encoding"/>
+                    <property name="responseTransformer-refs"/>
+                    <property name="method"/>
+                    <property name="user"/>
+                    <property name="responseTimeout"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="4"/>
+                    <property name="connector-ref"/>
+                </properties>
+            </endpoint>
+            <pattern name="search" type="http://www.mulesoft.org/schema/mule/ldap/ldap-connector" entity-id="LDAP#2">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name=""/>
+                    <property name="scope" value="SUB_TREE"/>
+                    <property name="baseDn" value="o=ionidea.com"/>
+                    <property name="authPassword"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/ldap/search"/>
+                    <property name="pageSize" value="500"/>
+                    <property name="returnObject"/>
+                    <property name="authDn"/>
+                    <property name="maxResults" value="200"/>
+                    <property name="authentication"/>
+                    <property name="config-ref" value="Ldap"/>
+                    <property name="auxiliary;index" value="5"/>
+                    <property name="filter" value="(sn=#[message.inboundProperties['http.query.params']['name']])"/>
+                    <property name="timeout"/>
+                </properties>
+            </pattern>
+            <pattern name="Split Result Set" type="http://www.mulesoft.org/schema/mule/core/collection-splitter" entity-id="Collection Splitter#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="businessEventsLabel"/>
+                    <property name="enableCorrelation"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="auxiliary;index" value="6"/>
+                </properties>
+            </pattern>
+            <pattern name="to LDIF" type="http://www.mulesoft.org/schema/mule/ldap/ldap-transformer" entity-id="LDAP#3">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="org.mule.tooling.ui.modules.core.widgets.meta.ModeAttribute" value="http://www.mulesoft.org/schema/mule/ldap/ldap-entry-to-ldif"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="7"/>
+                </properties>
+            </pattern>
+            <pattern name="Aggregate entries" type="http://www.mulesoft.org/schema/mule/core/collection-aggregator" entity-id="Collection Aggregator#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="businessEventsLabel"/>
+                    <property name="failOnTimeout" value="true"/>
+                    <property name="storePrefix"/>
+                    <property name="tracking:enable-default-events"/>
+                    <property name="auxiliary;index" value="8"/>
+                    <property name="timeout"/>
+                </properties>
+            </pattern>
+            <pattern name="Object to String" type="http://www.mulesoft.org/schema/mule/core/object-to-string-transformer" entity-id="Object to String#1">
+                <graphicalData x="0" y="0" width="0" height="0"/>
+                <properties>
+                    <property name="returnClass"/>
+                    <property name="ignoreBadInput"/>
+                    <property name="encoding"/>
+                    <property name="mimeType"/>
+                    <property name="auxiliary;index" value="9"/>
+                </properties>
+            </pattern>
+        </lane>
+    </flow>
+    <description></description>
+</mule-configuration>
