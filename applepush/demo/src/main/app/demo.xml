@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:apple-push="http://www.mulesoft.org/schema/mule/apple-push" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/apple-push http://www.mulesoft.org/schema/mule/apple-push/3.3/mule-apple-push.xsd">
+    <apple-push:config name="Apple_Push" host="gateway.sandbox.push.apple.com" port="2195" keystore="/Users/arbuzworks/Documents/ArbuzWorks.p12" keystorePassword="secret" doc:name="Apple Push"/>
+    <flow name="demoFlow1" doc:name="demoFlow1">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="push" doc:name="HTTP"/>
+        <apple-push:send config-ref="Apple_Push" alert="test alert" deviceToken="1eb443c6a8d49f25bf456b782b961e02bc1faa86ff6463357ea7cd23abd1b674" doc:name="Apple Push" badge="1"/>
+    </flow>
+</mule>
