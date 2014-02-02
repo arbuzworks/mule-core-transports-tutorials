@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/raa.mls/!svn/ver/69/trunk/ldap/demo
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/raa.mls/!svn/ver/69/trunk/ldap/demo/.classpath
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/raa.mls/!svn/ver/69/trunk/ldap/demo/.project
+END
+mule-project.xml
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/raa.mls/!svn/ver/69/trunk/ldap/demo/mule-project.xml
+END
